@@ -33,7 +33,7 @@ esto y podamos generar mejores interfaces entre el Estado y la Ciudadaniía.
 
 > Los datos anteriores como ejemplo
 
-## Listado Comunas RM [Person el centralismo]
+## Listado Comunas RM [Perdon el centralismo]
 - Alhué
 - Buin
 - Calera de Tango
