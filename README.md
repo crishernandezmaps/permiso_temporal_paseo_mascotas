@@ -12,12 +12,11 @@ diversas razones no pueden ingresar a Comisaría Virtual, me parece un deber. Es
 esto y podamos generar mejores interfaces entre el Estado y la Ciudadaniía.
 
 # Instalación
-
-clonar repo: ```git clone https://github.com/crishernandezmaps/permiso_temporal_paseo_mascotas.git```
-cd en el repo: ```cd permiso_temporal_paseo_mascotas```
-instalar liberías: ```pip install -r requirements.txt```
-descargar webdriver (Chrome): ```https://chromedriver.chromium.org/downloads```
-agregar tus datos en ```your_data.py```
+- clonar repo: ```git clone https://github.com/crishernandezmaps/permiso_temporal_paseo_mascotas.git```
+- cd en el repo: ```cd permiso_temporal_paseo_mascotas```
+- instalar liberías: ```pip install -r requirements.txt```
+- descargar webdriver (Chrome): ```https://chromedriver.chromium.org/downloads```
+- agregar tus datos en ```your_data.py```
 
 ```
 'name': 'Juan Juan Perez Perez',
@@ -28,9 +27,9 @@ agregar tus datos en ```your_data.py```
 'direccion': 'Av El Pizzas 1312, Depto 014'
 ```
 
-comment: ```# from my_data import personal_data```
-uncomment: ```from your_data import personal_data```
-run: ```python permisos.py```
+- comment: ```# from my_data import personal_data```
+- uncomment: ```from your_data import personal_data```
+- run: ```python permisos.py```
 
 > Los datos anteriores como ejemplo
 
