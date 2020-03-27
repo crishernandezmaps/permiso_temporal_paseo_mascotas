@@ -1,4 +1,7 @@
+.idea
+__pycache__
 my_data.py
+
 # General
 .DS_Store
 .AppleDouble
