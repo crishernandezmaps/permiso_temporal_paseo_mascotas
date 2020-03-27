@@ -32,10 +32,10 @@ def get_permit():
     # Commune
     driver.find_element_by_xpath('//*[@id="comunas_1210_chosen"]/a').click()
 
-    time.sleep(3)
+    t_sleep()
     driver.find_element_by_xpath('//*[@id="comunas_1210_chosen"]/div/div/input').send_keys(personal_data()['comuna'])
     driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[6]/div/div[2]/div/ul/li/em').click()
-    time.sleep(3)
+    t_sleep()
 
     # Address
     driver.find_element_by_xpath('//*[@id="1211"]').send_keys(personal_data()['direccion'])  # 35 characters
@@ -48,11 +48,11 @@ def get_permit():
 
     # Terms
     driver.find_element_by_xpath('//*[@id="en_caso_de_comprobarse_falsedad_en_la_declaracion_de_la_causal_invocada_para_requerir_el_presente_documento_se_incurrira_en_las_penas_del_art_210_del_codigo_penal"]').click()
-    time.sleep(3)
+    t_sleep()
 
     # Next
     driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[14]/button').click()
-    time.sleep(3)
+    t_sleep()
     window_after = driver.window_handles[0]
 
     # print(window_after)
@@ -60,7 +60,7 @@ def get_permit():
 
     # PDF
     driver.find_element_by_xpath('//*[@id="app"]/div/div/div[2]/form/fieldset/div[3]/p/a').click()
-    time.sleep(10)
+    t_sleep()
 
     driver.quit()
 
