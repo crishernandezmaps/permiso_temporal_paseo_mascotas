@@ -1,4 +1,5 @@
-.idea
+./twilio.env
+.idea/
 __pycache__
 my_data.py
 

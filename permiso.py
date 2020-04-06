@@ -1,68 +1,115 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from fake_useragent import UserAgent
 import time
+import os
 from my_data import personal_data
-# from your_data import personal_data
+import datetime
+from bs4 import BeautifulSoup
+
+# Settings
+chrome_options = Options()
+ua = UserAgent()
+userAgent = ua.random
+chrome_options.add_argument(f'user-agent={userAgent}')
+chrome_options.add_argument('--window-size=640,1080')
+
+# Path to Chromedriver in your machine (https://chromedriver.chromium.org/downloads)
+chrome_driver = r"/Users/tremen/Downloads/chromedriver"
+driver = webdriver.Chrome(executable_path=chrome_driver, options=chrome_options)
+
+# Get url for pet walking permit
+driver.get('https://comisariavirtual.cl/tramites/iniciar/67')
 
 
 def t_sleep():
-    return time.sleep(3)
+    return time.sleep(5)
+
+
+def hour_to_go_out():
+    d = str(datetime.datetime.now()).split(' ')[-1].split(':')[0]
+    return str(int(d) + 1)
+
+
+def downloaded_permit_id(h):
+    soup = BeautifulSoup(h, features='lxml')
+    a = soup.find_all('a', {'class', 'btn btn-success'})
+    hf = a[0]['href']
+    pdf_id = hf.split('?id=')[-1].split('&token=')[0]
+    print(pdf_id)
+    return pdf_id
+
+
+def to_wait(xpath_string):
+    click_on = WebDriverWait(driver, 3).until(EC.element_to_be_clickable((By.XPATH, xpath_string)))
+    click_on.click()
+    t_sleep()
 
 
 def get_permit():
-    chrome_driver = r"/Users/tremen/Downloads/chromedriver"  # Path to Chromedriver in your machine. Download from here: https://chromedriver.chromium.org/downloads
-    driver = webdriver.Chrome(executable_path=chrome_driver)
+    try:
+        # Clicking RUT
+        driver.find_element_by_xpath('//*[@id="app"]/div/div/div[2]/form/fieldset/div[3]/p/a').click()
 
-    # Get url for pet walking permit
-    driver.get('https://comisariavirtual.cl/tramites/iniciar/67')  # Walk your pet url
+        # Name
+        driver.find_element_by_xpath('//*[@id="1868"]').send_keys(personal_data()['name'])
 
-    # Clicking RUT
-    driver.find_element_by_xpath('//*[@id="app"]/div/div/div[2]/form/fieldset/div[3]/p/a').click()
+        # RUT
+        driver.find_element_by_xpath('//*[@id="1869"]').send_keys(personal_data()['rut'])
 
-    # Filling form
-    # Name
-    driver.find_element_by_xpath('//*[@id="1207"]').send_keys(personal_data()['name'])
-    # RUT
-    driver.find_element_by_xpath('//*[@id="1209"]').send_keys(personal_data()['rut'])
-    # Identifier
-    driver.find_element_by_xpath('//*[@id="1301"]').send_keys(personal_data()['serie_carnet'])
-    # Region
-    driver.find_element_by_xpath('//*[@id="regiones_1210_chosen"]/a').click()
-    driver.find_element_by_xpath('//*[@id="regiones_1210_chosen"]/div/div/input').send_keys(personal_data()['region'])
-    driver.find_element_by_xpath('//*[@id="regiones_1210_chosen"]/div/ul/li/em').click()
-    # Commune
-    driver.find_element_by_xpath('//*[@id="comunas_1210_chosen"]/a').click()
+        # Region
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[1]/a').click()
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[1]/div/div/input').send_keys(personal_data()['region'])
+        t_sleep()
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[1]/div/ul/li').click()
+        t_sleep()
 
-    t_sleep()
-    driver.find_element_by_xpath('//*[@id="comunas_1210_chosen"]/div/div/input').send_keys(personal_data()['comuna'])
-    driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[6]/div/div[2]/div/ul/li/em').click()
-    t_sleep()
+        # Commune
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[2]/a').click()
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[2]/div/div/input').send_keys(personal_data()['comuna'])
+        t_sleep()
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[5]/div/div[2]/div/ul/li').click()
 
-    # Address
-    driver.find_element_by_xpath('//*[@id="1211"]').send_keys(personal_data()['direccion'])  # 35 characters
+        # Address
+        driver.find_element_by_xpath('//*[@id="1871"]').send_keys(personal_data()['direccion'])
 
-    # Meaning --> Uncomment if needed
-    # driver.find_element_by_xpath('//*[@id="1212"]').send_keys('Pasear mascotas')
+        # Complete trip
+        driver.find_element_by_xpath('//*[@id="Ida - Regreso"]').click()
+        t_sleep()
 
-    # Complete trip
-    driver.find_element_by_xpath('//*[@id="Ida - Regreso"]').click()
+        # Time
+        to_wait('//*[@id="1876_chosen"]/a/span')
+        driver.find_element_by_xpath('//*[@id="1876_chosen"]/div/div/input').send_keys(hour_to_go_out())
+        t_sleep()
+        driver.find_element_by_xpath('//*[@id="1876_chosen"]/div/ul/li').click()
+        t_sleep()
 
-    # Terms
-    driver.find_element_by_xpath('//*[@id="en_caso_de_comprobarse_falsedad_en_la_declaracion_de_la_causal_invocada_para_requerir_el_presente_documento_se_incurrira_en_las_penas_del_art_210_del_codigo_penal"]').click()
-    t_sleep()
+        # Terms
+        driver.find_element_by_xpath('//*[@id="en_caso_de_comprobarse_falsedad_en_la_declaracion_de_la_causal_invocada_para_requerir_el_presente_documento_se_incurrira_en_las_penas_del_art_210_del_codigo_penal"]').click()
+        t_sleep()
 
-    # Next
-    driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[14]/button').click()
-    t_sleep()
-    window_after = driver.window_handles[0]
+        # Siguiente
+        driver.find_element_by_xpath('/html/body/div/div/div/div[2]/form/div[13]/button').click()
+        window_after = driver.window_handles[0]
+        driver.switch_to.window(window_after)
+        t_sleep()
 
-    # print(window_after)
-    driver.switch_to.window(window_after)
+        # PDF
+        driver.find_element_by_xpath('//*[@id="app"]/div/div/div[2]/form/fieldset/div[3]/p/a').click()
+        t_sleep()
 
-    # PDF
-    driver.find_element_by_xpath('//*[@id="app"]/div/div/div[2]/form/fieldset/div[3]/p/a').click()
-    t_sleep()
+        os.system('cd ~/Downloads && open .')
+        print('All done')
 
-    driver.quit()
+        # Finally, quit the browser
+        driver.quit()
+        
+    except Exception as e:
+        print(e)
+        driver.quit()
 
 
 if __name__ == '__main__':
