@@ -20,8 +20,7 @@ esto y podamos generar mejores interfaces entre el Estado y la Ciudadaniía.
 
 ```
 'name': 'Juan Juan Perez Perez',
-'rut': 'xxxxxxxxx',
-'serie_carnet': 'xxx.xxx.xxx',
+'rut': 'xxxxxxxx-x',
 'region': 'Metropolitana de Santiago',
 'comuna': 'Providencia',
 'direccion': 'Av El Pizzas 1312, Depto 014'

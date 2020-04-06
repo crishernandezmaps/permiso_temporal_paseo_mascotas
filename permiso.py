@@ -1,3 +1,5 @@
+from my_data import personal_data
+# from your_data import personal_data
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -6,9 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from fake_useragent import UserAgent
 import time
 import os
-from my_data import personal_data
 import datetime
-from bs4 import BeautifulSoup
 
 # Settings
 chrome_options = Options()
@@ -32,15 +32,6 @@ def t_sleep():
 def hour_to_go_out():
     d = str(datetime.datetime.now()).split(' ')[-1].split(':')[0]
     return str(int(d) + 1)
-
-
-def downloaded_permit_id(h):
-    soup = BeautifulSoup(h, features='lxml')
-    a = soup.find_all('a', {'class', 'btn btn-success'})
-    hf = a[0]['href']
-    pdf_id = hf.split('?id=')[-1].split('&token=')[0]
-    print(pdf_id)
-    return pdf_id
 
 
 def to_wait(xpath_string):
